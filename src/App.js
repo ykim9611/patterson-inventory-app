@@ -1,11 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './HomePage';
-import NavBar from './NavBar';
-import AddOrderPage from './AddOrderPage';
-import ModifyOrderPage from './ModifyOrderPage';
-import ViewAllOrderPage from './ViewAllOrderPage';
-import InstallChecklistPage from './InstallChecklistPage';
-import UpdateLocationPage from './UpdateLocationPage';
+import HomePage from './pages/HomePage';
+import NavBar from './components/NavBar/NavBar';
+import AddOrderPage from './pages/AddOrderPage';
+import ModifyOrderPage from './pages/ModifyOrderPage';
+import ViewAllOrderPage from './pages/ViewAllOrderPage';
+import InstallChecklistPage from './pages/InstallChecklistPage';
+import UpdateLocationPage from './pages/UpdateLocationPage';
 function App() {
   return (
     <>
