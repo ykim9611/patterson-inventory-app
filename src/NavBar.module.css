@@ -1,0 +1,51 @@
+.customNavbar {
+    font-family: proxima-nova, Arial, sans-serif !important;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background-color: rgb(0, 55, 103) !important;
+}
+
+.navBrandImage {
+    margin-right: 25px !important;
+}
+
+.navLink {
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.navLink:hover {
+    color: rgb(20, 124, 189) !important;
+    text-decoration: underline;
+}
+
+.navbar-nav a {
+    font-weight: bold;
+    color: white;
+}
+
+.navbar-nav a:hover {
+    color: rgb(20, 124, 189);
+    text-decoration: underline;
+}
+
+.navbar-toggler {
+    border-color: transparent;
+}
+
+
+.navbar-toggler:hover,
+.navbar-toggler:focus {
+    outline: white;
+    outline: none;
+    box-shadow: none;
+}
+
+/* .navbar-toggler-icon {
+    color: white;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+} */
