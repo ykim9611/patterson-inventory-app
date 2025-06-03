@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { supabase } from '../../services/supabaseClient';
 import styles from './AddOrderPage.module.css';
 import OrdersTableHeader from '../../components/OrdersTableHeader/OrdersTableHeader';
 import Table from 'react-bootstrap/Table';
 import { v4 as uuidv4 } from 'uuid';
 import StagedOrderRow from '../../components/StagedOrderRow/StagedOrderRow';
+import OrderManualInputSection from '../../components/OrderManualInputSection/OrderManualInputSection';
+import ScanInput from '../../components/ScanInput/ScanInput';
 
 function AddOrderPage(props) {
   const [procurementSpecialists, setProcurementSpecialists] = useState([]);
@@ -12,6 +14,7 @@ function AddOrderPage(props) {
   const [formData, setFormData] = useState({});
   const [stagedOrders, setStagedOrders] = useState([]);
   const [receivedDate, setReceivedDate] = useState();
+  const scanInputRef = useRef(null);
 
   useEffect(() => {
     const getProcurementSpecialists = async () => {
@@ -68,6 +71,7 @@ function AddOrderPage(props) {
     };
     setStagedOrders((prevData) => [...prevData, labelObject]);
     setScanInput('');
+    scanInputRef.current?.focus();
   };
 
   const handleInputChange = (index, field, value) => {
@@ -97,57 +101,19 @@ function AddOrderPage(props) {
   return (
     <div className={styles.container}>
       <h2>Add Order</h2>
-      <div className={styles.manualEntryContainer}>
-        <div>
-          Customer:{' '}
-          <input
-            type='text'
-            name='customerName'
-            onChange={(e) => handleOrderChange(e)}
-          />
-        </div>
-        <div>
-          Procurement Specialist:{' '}
-          <select
-            name='procurementSpecialist'
-            id=''
-            onChange={(e) => handleOrderChange(e)}
-          >
-            <option value=''>Select a PS</option>
-            {procurementSpecialists.map((procurementSpecialist) => {
-              return (
-                <option
-                  key={procurementSpecialist.id}
-                  value={procurementSpecialist.procurement_specialist}
-                >
-                  {procurementSpecialist.procurement_specialist}
-                </option>
-              );
-            })}
-          </select>
-        </div>
-        <div>
-          Received Date:{' '}
-          <input
-            type='date'
-            value={receivedDate}
-            onChange={(e) => setReceivedDate(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className={styles.scanContainer}>
-        <h2>Scan QR Code</h2>
-        <div>
-          <input
-            type='text'
-            name='scanInput'
-            value={scanInput}
-            className={styles.scanInput}
-            onChange={(e) => setScanInput(e.target.value)}
-          />
-          <button onClick={(e) => handleAddClick(e)}>Add</button>
-        </div>
-      </div>
+      <OrderManualInputSection
+        formData={formData}
+        receivedDate={receivedDate}
+        onInputChange={handleOrderChange}
+        onDateChange={setReceivedDate}
+        procurementSpecialists={procurementSpecialists}
+      />
+      <ScanInput
+        scanInput={scanInput}
+        setScanInput={setScanInput}
+        handleAddClick={handleAddClick}
+        scanInputRef={scanInputRef}
+      />
       <div className={styles.stagedOrdersContainer}>
         <h2>Staged Orders</h2>
         <Table striped bordered hover responsive>
