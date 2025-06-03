@@ -2,7 +2,13 @@
 import React from 'react';
 import styles from './StagedOrderRow.module.css'; // or reuse AddOrderPage.module.css
 
-function StagedOrderRow({ stagedOrder, index, handleInputChange }) {
+function StagedOrderRow({
+  stagedOrder,
+  index,
+  handleInputChange,
+  locations,
+  procurementSpecialists,
+}) {
   return (
     <tr>
       <td>
@@ -16,14 +22,19 @@ function StagedOrderRow({ stagedOrder, index, handleInputChange }) {
         />
       </td>
       <td>
-        <input
-          type='text'
+        <select
+          name='procurementSpecialist'
           value={stagedOrder.procurementSpecialist}
           onChange={(e) =>
             handleInputChange(index, 'procurementSpecialist', e.target.value)
           }
-          className={styles.tableInput}
-        />
+        >
+          {procurementSpecialists.map((ps) => (
+            <option key={ps.id} value={ps.procurement_specialist}>
+              {ps.procurement_specialist}
+            </option>
+          ))}
+        </select>
       </td>
       <td>
         <input
@@ -111,12 +122,18 @@ function StagedOrderRow({ stagedOrder, index, handleInputChange }) {
         />
       </td>
       <td>
-        <input
-          type='text'
+        <select
+          name='location'
           value={stagedOrder.location || ''}
           onChange={(e) => handleInputChange(index, 'location', e.target.value)}
-          className={styles.tableInput}
-        />
+        >
+          <option value=''>Select a Location</option>
+          {locations.map((location) => (
+            <option key={location.id} value={location.location}>
+              {location.location}
+            </option>
+          ))}
+        </select>
       </td>
     </tr>
   );
