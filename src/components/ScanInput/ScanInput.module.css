@@ -1,0 +1,9 @@
+.scanContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scanInput {
+  width: 800px;
+}
