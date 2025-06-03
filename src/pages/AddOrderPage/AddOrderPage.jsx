@@ -8,10 +8,14 @@ import StagedOrderRow from '../../components/StagedOrderRow/StagedOrderRow';
 import OrderManualInputSection from '../../components/OrderManualInputSection/OrderManualInputSection';
 import ScanInput from '../../components/ScanInput/ScanInput';
 
-function AddOrderPage(props) {
+function AddOrderPage() {
   const [procurementSpecialists, setProcurementSpecialists] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [scanInput, setScanInput] = useState('');
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    customerName: '',
+    procurementSpecialist: '',
+  });
   const [stagedOrders, setStagedOrders] = useState([]);
   const [receivedDate, setReceivedDate] = useState();
   const scanInputRef = useRef(null);
@@ -32,8 +36,20 @@ function AddOrderPage(props) {
       var date = new Date().toISOString().split('T')[0];
       setReceivedDate(date);
     };
+    const getLocations = async () => {
+      const { data, error } = await supabase.from('locations').select('*');
+      const sortedData = data.sort((a, b) =>
+        a.location.localeCompare(b.location)
+      );
+      if (error) {
+        console.error('Error fetching data:', error);
+      } else {
+        setLocations(sortedData);
+      }
+    };
     getProcurementSpecialists();
     getToday();
+    getLocations();
   }, []);
 
   const handleOrderChange = (e) => {
@@ -68,6 +84,7 @@ function AddOrderPage(props) {
       boxNumberTotal: scan.slice(51, 53).trim(),
       serialNumber: scan.slice(54).trim(),
       notes: '',
+      location: '',
     };
     setStagedOrders((prevData) => [...prevData, labelObject]);
     setScanInput('');
@@ -94,7 +111,6 @@ function AddOrderPage(props) {
     } else if (part.length === 0) {
       //add new part description logic modal popup. and then assign the new description.
     }
-    console.log(part[0]?.part_description || '');
     return part[0]?.part_description || '';
   };
 
@@ -133,6 +149,8 @@ function AddOrderPage(props) {
                     stagedOrder={stagedOrder}
                     index={index}
                     handleInputChange={handleInputChange}
+                    locations={locations}
+                    procurementSpecialists={procurementSpecialists}
                   />
                 ))}
               </>

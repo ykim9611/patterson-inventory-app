@@ -12,11 +12,20 @@ function OrderManualInputSection({
     <div className={styles.manualEntryContainer}>
       <div>
         Customer:{' '}
-        <input type='text' name='customerName' onChange={onInputChange} />
+        <input
+          type='text'
+          name='customerName'
+          value={formData.customerName}
+          onChange={onInputChange}
+        />
       </div>
       <div>
         Procurement Specialist:{' '}
-        <select name='procurementSpecialist' onChange={onInputChange}>
+        <select
+          name='procurementSpecialist'
+          value={formData.procurementSpecialist}
+          onChange={onInputChange}
+        >
           <option value=''>Select a PS</option>
           {procurementSpecialists.map((ps) => (
             <option key={ps.id} value={ps.procurement_specialist}>
@@ -29,7 +38,7 @@ function OrderManualInputSection({
         Received Date:{' '}
         <input
           type='date'
-          value={receivedDate}
+          value={receivedDate || ''}
           onChange={(e) => onDateChange(e.target.value)}
         />
       </div>
