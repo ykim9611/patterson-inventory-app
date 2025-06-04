@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import StagedOrderRow from '../../components/StagedOrderRow/StagedOrderRow';
 import OrderManualInputSection from '../../components/OrderManualInputSection/OrderManualInputSection';
 import ScanInput from '../../components/ScanInput/ScanInput';
+import SubmittedOrderRow from '../../components/SubmittedOrderRow/SubmittedOrderRow';
 
 function AddOrderPage() {
   const [procurementSpecialists, setProcurementSpecialists] = useState([]);
@@ -18,6 +19,8 @@ function AddOrderPage() {
   });
   const [stagedOrders, setStagedOrders] = useState([]);
   const [receivedDate, setReceivedDate] = useState();
+  const [submitttedStatus, setSubmittedStatus] = useState(false);
+  const [submittedOrders, setSubmittedOrders] = useState([]);
   const scanInputRef = useRef(null);
 
   useEffect(() => {
@@ -114,6 +117,62 @@ function AddOrderPage() {
     return part[0]?.part_description || '';
   };
 
+  const submitStagedOrders = async () => {
+    console.log('staged: ', stagedOrders);
+    const payload = stagedOrders.map((order) => ({
+      id: order.id,
+      qr_code: order.qrCode,
+      customer_name: order.customerName,
+      procurement_specialist: order.procurementSpecialist,
+      received_date: order.receivedDate,
+      part_number: order.partNumber,
+      part_description: order.partDescription,
+      order_type: order.orderType,
+      sales_order: order.salesOrder,
+      quantity: order.quantity,
+      box_number: order.boxNumber,
+      box_number_total: order.boxNumberTotal,
+      serial_number: order.serialNumber,
+      notes: order.notes,
+      location: order.location,
+    }));
+    const { data, error } = await supabase
+      .from('orders')
+      .insert(payload)
+      .select(); // This returns the rows with the real Supabase-generated IDs
+    if (error) {
+      console.error('Error fetching data:', error);
+    } else {
+      const submittedOrders = data.map((dataEntry) => ({
+        id: dataEntry.id,
+        qrCode: dataEntry.qr_code,
+        customerName: dataEntry.customer_name,
+        procurementSpecialist: dataEntry.procurement_specialist,
+        receivedDate: dataEntry.received_date,
+        partNumber: dataEntry.part_number,
+        partDescription: dataEntry.part_description,
+        orderType: dataEntry.order_type,
+        salesOrder: dataEntry.sales_order,
+        quantity: dataEntry.quantity,
+        boxNumber: dataEntry.box_number,
+        boxNumberTotal: dataEntry.box_number_total,
+        serialNumber: dataEntry.serial_number,
+        notes: dataEntry.notes,
+        location: dataEntry.location,
+      }));
+      setSubmittedStatus(true);
+      setSubmittedOrders(submittedOrders);
+      console.log('submitted: ', submittedOrders);
+    }
+  };
+
+  const clearSubmittedOrders = () => {
+    setSubmittedStatus(false);
+    setSubmittedOrders([]);
+    setStagedOrders([]);
+    scanInputRef.current?.focus();
+  };
+
   return (
     <div className={styles.container}>
       <h2>Add Order</h2>
@@ -130,34 +189,57 @@ function AddOrderPage() {
         handleAddClick={handleAddClick}
         scanInputRef={scanInputRef}
       />
-      <div className={styles.stagedOrdersContainer}>
-        <h2>Staged Orders</h2>
-        <Table striped bordered hover responsive>
-          <OrdersTableHeader />
-          <tbody>
-            {stagedOrders.length === 0 ? (
-              <tr>
-                <td colSpan={12} className={styles.alternativeText}>
-                  Add an order...
-                </td>
-              </tr>
-            ) : (
-              <>
-                {stagedOrders.map((stagedOrder, index) => (
-                  <StagedOrderRow
-                    key={stagedOrder.id}
-                    stagedOrder={stagedOrder}
-                    index={index}
-                    handleInputChange={handleInputChange}
-                    locations={locations}
-                    procurementSpecialists={procurementSpecialists}
+      {!submitttedStatus ? (
+        <div className={styles.stagedOrdersContainer}>
+          <h2>Staged Orders</h2>
+          <Table striped bordered hover responsive>
+            <OrdersTableHeader />
+            <tbody>
+              {stagedOrders.length === 0 ? (
+                <tr>
+                  <td colSpan={12} className={styles.alternativeText}>
+                    Add an order...
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {stagedOrders.map((stagedOrder, index) => (
+                    <StagedOrderRow
+                      key={stagedOrder.id}
+                      stagedOrder={stagedOrder}
+                      index={index}
+                      handleInputChange={handleInputChange}
+                      locations={locations}
+                      procurementSpecialists={procurementSpecialists}
+                    />
+                  ))}
+                </>
+              )}
+            </tbody>
+          </Table>
+          <button onClick={submitStagedOrders}>Submit</button>
+        </div>
+      ) : (
+        <div>
+          <div className={styles.stagedOrdersContainer}>
+            <h2>Submitted Orders</h2>
+            <Table striped bordered hover responsive>
+              <OrdersTableHeader />
+              <tbody>
+                {submittedOrders.map((submittedOrder, index) => (
+                  <SubmittedOrderRow
+                    key={submittedOrder.id}
+                    submittedOrder={submittedOrder}
                   />
                 ))}
-              </>
-            )}
-          </tbody>
-        </Table>
-      </div>
+              </tbody>
+            </Table>
+            <button onClick={clearSubmittedOrders}>
+              Clear and Add New Orders
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
