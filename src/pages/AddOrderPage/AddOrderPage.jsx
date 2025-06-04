@@ -22,6 +22,7 @@ function AddOrderPage() {
   const [submitttedStatus, setSubmittedStatus] = useState(false);
   const [submittedOrders, setSubmittedOrders] = useState([]);
   const scanInputRef = useRef(null);
+  const deleteHeaderRef = useRef(null);
 
   useEffect(() => {
     const getProcurementSpecialists = async () => {
@@ -92,6 +93,7 @@ function AddOrderPage() {
     setStagedOrders((prevData) => [...prevData, labelObject]);
     setScanInput('');
     scanInputRef.current?.focus();
+    deleteHeaderRef.current.style.display = 'table-cell';
   };
 
   const handleInputChange = (index, field, value) => {
@@ -173,6 +175,16 @@ function AddOrderPage() {
     scanInputRef.current?.focus();
   };
 
+  const handleDeleteClick = (e, index) => {
+    setStagedOrders((prevArray) => {
+      const newArray = prevArray.filter((_, i) => i !== index);
+      if (newArray.length === 0 && deleteHeaderRef.current) {
+        deleteHeaderRef.current.style.display = 'none';
+      }
+      return newArray;
+    });
+  };
+
   return (
     <div className={styles.container}>
       <h2>Add Order</h2>
@@ -193,7 +205,7 @@ function AddOrderPage() {
         <div className={styles.stagedOrdersContainer}>
           <h2>Staged Orders</h2>
           <Table striped bordered hover responsive>
-            <OrdersTableHeader />
+            <OrdersTableHeader deleteHeaderRef={deleteHeaderRef} />
             <tbody>
               {stagedOrders.length === 0 ? (
                 <tr>
@@ -211,13 +223,18 @@ function AddOrderPage() {
                       handleInputChange={handleInputChange}
                       locations={locations}
                       procurementSpecialists={procurementSpecialists}
+                      handleDeleteClick={handleDeleteClick}
                     />
                   ))}
                 </>
               )}
             </tbody>
           </Table>
-          <button onClick={submitStagedOrders}>Submit</button>
+          {stagedOrders.length > 0 ? (
+            <button onClick={submitStagedOrders}>Submit</button>
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <div>

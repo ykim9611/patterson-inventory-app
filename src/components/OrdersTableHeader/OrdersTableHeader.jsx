@@ -1,6 +1,6 @@
 import styles from './OrdersTableHeader.module.css';
 
-function OrdersTableHeader() {
+function OrdersTableHeader({ deleteHeaderRef }) {
   return (
     <thead>
       <tr>
@@ -15,6 +15,13 @@ function OrdersTableHeader() {
         <th className={styles.tableBox}>Box</th>
         <th className={styles.tableNotes}>Notes</th>
         <th className={styles.tableLocation}>Location</th>
+        <th
+          className={styles.tableDelete}
+          ref={deleteHeaderRef}
+          style={{ display: 'none' }}
+        >
+          <img alt='' src='/red-trash-can-icon.svg' width='20' height='20' />
+        </th>
       </tr>
     </thead>
   );
