@@ -1,0 +1,6 @@
+td div {
+  text-align: center;
+  white-space: nowrap;       /* Don't wrap */
+  overflow: hidden;          /* Hide overflow */
+  text-overflow: ellipsis;   /* Add "..." when text is cut */
+}
