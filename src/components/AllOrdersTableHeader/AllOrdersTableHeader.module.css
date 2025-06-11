@@ -1,0 +1,54 @@
+table {
+    margin-top: 10px;
+}
+
+th {
+    width: 80px;
+    border: 1px solid black;
+    text-align: center !important;
+    text-decoration: underline;
+    padding: 5px 5px !important;
+}
+
+.tablePs,
+.tableQuantity {
+    min-width: 55px !important;
+    padding: 0px 5px;
+}
+
+.tableBox {
+    min-width: 70px !important;
+    padding: 0px 5px;
+}
+
+.tableSalesOrder {
+    min-width: 130px !important;
+}
+
+.tableCustomer, .tableDate {
+    min-width: 110px !important;
+}
+
+
+.tableSerialNumber,
+.tableLocation {
+    min-width: 150px !important;
+}
+
+.tableDesc,
+.tableNotes {
+    min-width: 200px !important;
+}
+
+.tableDelete {
+    padding: 3px 5px 7px 5px !important;
+}
+
+.thWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border: none;
+}
+
