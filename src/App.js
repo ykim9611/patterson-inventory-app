@@ -3,7 +3,7 @@ import HomePage from './pages/HomePage';
 import NavBar from './components/NavBar/NavBar';
 import AddOrderPage from './pages/AddOrderPage/AddOrderPage';
 import ModifyOrderPage from './pages/ModifyOrderPage';
-import ViewAllOrderPage from './pages/ViewAllOrderPage';
+import ViewAllOrderPage from './pages/ViewAllOrderPage/ViewAllOrderPage';
 import InstallChecklistPage from './pages/InstallChecklistPage';
 import UpdateLocationPage from './pages/UpdateLocationPage';
 import PageWrapper from './components/PageWrapper/PageWrapper';
