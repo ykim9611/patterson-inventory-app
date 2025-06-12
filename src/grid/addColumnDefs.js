@@ -1,3 +1,5 @@
+import DeleteOrderButton from '../components/DeleteOrderButton/DeleteOrderButton';
+
 export const addColumnDefs = [
   {
     field: 'customer_name',
@@ -96,5 +98,15 @@ export const addColumnDefs = [
     flex: 1,
     sortable: false,
     editable: true,
+  },
+  {
+    field: 'delete',
+    headerName: '',
+    filter: false,
+    flex: 0.6,
+    sortable: false,
+    editable: false,
+    cellRenderer: DeleteOrderButton,
+    cellStyle: { cursor: 'pointer', textAlign: 'center' },
   },
 ];
