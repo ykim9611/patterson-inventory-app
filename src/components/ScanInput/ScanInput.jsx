@@ -10,7 +10,7 @@ function ScanInput({ scanInput, scanInputRef, setScanInput, handleAddClick }) {
           type='text'
           name='scanInput'
           value={scanInput}
-          className={styles.scanInput}
+          className={`${styles.field} ${styles.scanInput}`}
           onChange={(e) => setScanInput(e.target.value)}
           ref={scanInputRef}
         />

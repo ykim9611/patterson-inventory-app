@@ -6,7 +6,7 @@
 
 .manualEntryContainer {
   display: flex;
-  width: 900px;
+  width: 1000px;
   justify-content:space-around;
 }
 
@@ -45,3 +45,52 @@
   padding: 2px 4px;
   font-size: 0.9rem;
 }
+
+.manualEntryContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.manualEntryContainer > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 200px; /* for consistent wrapping */
+}
+
+input,
+select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.field {
+  height: 42px !important;            /* 👈 forces identical height */
+  padding: 0 0.75rem !important;
+  line-height: 1.2 !important;        /* keeps text vertically centred */
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  outline: none !important;
+  box-sizing: border-box !important;  /* include border in the 42 px */
+  transition: border-color .2s !important;
+}
+
+.field:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.2) !important;
+}
+

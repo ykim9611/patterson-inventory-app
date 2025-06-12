@@ -17,6 +17,7 @@ function OrderManualInputSection({
           name='customerName'
           value={formData.customerName}
           onChange={onInputChange}
+          className={`${styles.field}`}
         />
       </div>
       <div>
@@ -25,6 +26,7 @@ function OrderManualInputSection({
           name='procurementSpecialist'
           value={formData.procurementSpecialist}
           onChange={onInputChange}
+          className={`${styles.field}`}
         >
           <option value=''>Select a PS</option>
           {procurementSpecialists.map((ps) => (
@@ -40,6 +42,7 @@ function OrderManualInputSection({
           type='date'
           value={receivedDate || ''}
           onChange={(e) => onDateChange(e.target.value)}
+          className={`${styles.field}`}
         />
       </div>
     </div>
