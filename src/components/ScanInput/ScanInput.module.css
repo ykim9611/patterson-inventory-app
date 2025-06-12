@@ -8,3 +8,65 @@
   width: 800px;
   margin-right: 10px;
 }
+
+.scanContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.scanContainer > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.scanInput {
+  flex: 1 1 300px; /* Grow/shrink with min width of 300px */
+  max-width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.scanInput:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px !important;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+.field {
+  height: 42px !important;            /* 👈 forces identical height */
+  padding: 0 0.75rem !important;
+  line-height: 1.2 !important;        /* keeps text vertically centred */
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  outline: none !important;
+  box-sizing: border-box !important;  /* include border in the 42 px */
+  transition: border-color .2s !important;
+}
+
+.field:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37,99,235,.2) !important;
+}

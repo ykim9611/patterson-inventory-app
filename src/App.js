@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import NavBar from './components/NavBar/NavBar';
 import AddOrderPage from './pages/AddOrderPage/AddOrderPage';
+import AddOrderPageTwo from './pages/AddOrderPage/AddOrderPageTwo';
 import ModifyOrderPage from './pages/ModifyOrderPage';
 import ViewAllOrderPage from './pages/ViewAllOrderPage/ViewAllOrderPage';
 import InstallChecklistPage from './pages/InstallChecklistPage';
@@ -15,7 +16,8 @@ function App() {
       <PageWrapper>
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/add-order' element={<AddOrderPage />} />
+          <Route path='/add-order' element={<AddOrderPageTwo />} />
+          {/* <Route path='/add-order' element={<AddOrderPage />} /> */}
           <Route path='/modify-order' element={<ModifyOrderPage />} />
           <Route path='/view-all-order' element={<ViewAllOrderPage />} />
           <Route path='/install-checklist' element={<InstallChecklistPage />} />
