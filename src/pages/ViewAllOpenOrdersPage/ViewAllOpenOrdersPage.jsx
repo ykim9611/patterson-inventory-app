@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabaseClient';
 import { AgGridReact } from 'ag-grid-react';
-import styles from './ViewAllOrderPage.module.css';
+import styles from './ViewAllOpenOrdersPage.module.css';
 import { viewColumnDefs } from '../../grid/viewColumnDefs';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-function ViewAllOrderPage(props) {
+function ViewAllOpenOrdersPage(props) {
   // Row Data: The data to be displayed.
   const [rowData, setRowData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,6 @@ function ViewAllOrderPage(props) {
       if (error) {
         console.error('Error fetching data:', error);
       } else {
-        console.log(data);
         setRowData(data);
         setLoading(false);
       }
@@ -48,7 +47,7 @@ function ViewAllOrderPage(props) {
   );
 }
 
-export default ViewAllOrderPage;
+export default ViewAllOpenOrdersPage;
 
 /*-----------Infinite Version-----------------------*/
 

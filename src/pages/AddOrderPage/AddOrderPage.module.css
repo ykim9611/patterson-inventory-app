@@ -46,22 +46,25 @@
   font-size: 0.9rem;
 }
 
-.submitButtonContainer {
+.buttonContainer {
   margin-top: 1rem;
   display: flex;
   justify-content: center; /* right-aligned */
 }
 
-.submitButtonContainer button {
+.buttonContainer button {
   padding: 0.5rem 1rem;
-  background-color: #007bff;
+  background-color: rgb(0, 55, 103);
   color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.submitButtonContainer button:hover {
-  background-color: #0056b3;
+.buttonContainer button:hover {
+  background-color: rgb(20, 124, 189);
 }
 
+.h2 {
+  margin-top: 20px;
+}

@@ -1,28 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../services/supabaseClient';
-import styles from './AddOrderPage.module.css';
-import OrdersTableHeader from '../../components/OrdersTableHeader/OrdersTableHeader';
-import Table from 'react-bootstrap/Table';
-import { v4 as uuidv4 } from 'uuid';
-import StagedOrderRow from '../../components/StagedOrderRow/StagedOrderRow';
+import { AgGridReact } from 'ag-grid-react';
+import { addColumnDefs } from '../../grid/addColumnDefs';
+import { viewColumnDefs } from '../../grid/viewColumnDefs';
 import OrderManualInputSection from '../../components/OrderManualInputSection/OrderManualInputSection';
 import ScanInput from '../../components/ScanInput/ScanInput';
-import SubmittedOrderRow from '../../components/SubmittedOrderRow/SubmittedOrderRow';
+import styles from './AddOrderPage.module.css';
+import { v4 as uuidv4 } from 'uuid';
 
-function AddOrderPage() {
+function AddOrderPage(props) {
   const [procurementSpecialists, setProcurementSpecialists] = useState([]);
   const [locations, setLocations] = useState([]);
   const [scanInput, setScanInput] = useState('');
+  const [receivedDate, setReceivedDate] = useState();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     customerName: '',
     procurementSpecialist: '',
   });
   const [stagedOrders, setStagedOrders] = useState([]);
-  const [receivedDate, setReceivedDate] = useState();
+  const scanInputRef = useRef(null);
+
   const [submitttedStatus, setSubmittedStatus] = useState(false);
   const [submittedOrders, setSubmittedOrders] = useState([]);
-  const scanInputRef = useRef(null);
-  const deleteHeaderRef = useRef(null);
 
   useEffect(() => {
     const getProcurementSpecialists = async () => {
@@ -51,10 +51,11 @@ function AddOrderPage() {
         setLocations(sortedData);
       }
     };
+
     getProcurementSpecialists();
     getToday();
     getLocations();
-  }, []);
+  }, [stagedOrders]);
 
   const handleOrderChange = (e) => {
     const { name, value } = e.target;
@@ -75,33 +76,25 @@ function AddOrderPage() {
     var partDescription = await findPartDescription(partNumber);
     var labelObject = {
       id: uuidv4(),
-      qrCode: scan.trim(),
-      customerName: formData.customerName || '',
-      procurementSpecialist: formData.procurementSpecialist || '',
-      receivedDate: receivedDate || '',
-      partNumber,
-      partDescription,
-      orderType: scan.slice(18, 19).trim(),
-      salesOrder: scan.slice(19, 29).trim(),
+      qr_code: scan.trim(),
+      customer_name: formData.customerName || '',
+      procurement_specialist: formData.procurementSpecialist || '',
+      received_date: receivedDate || '',
+      part_number: partNumber,
+      part_description: partDescription,
+      order_type: scan.slice(18, 19).trim(),
+      sales_order: scan.slice(19, 29).trim(),
       quantity: scan.slice(47, 49).trim(),
-      boxNumber: scan.slice(49, 51).trim(),
-      boxNumberTotal: scan.slice(51, 53).trim(),
-      serialNumber: scan.slice(54).trim(),
+      box_number: scan.slice(49, 51).trim(),
+      box_number_total: scan.slice(51, 53).trim(),
+      serial_number: scan.slice(54).trim(),
       notes: '',
       location: '',
     };
-    setStagedOrders((prevData) => [...prevData, labelObject]);
+    setStagedOrders((prevData) => [labelObject, ...prevData]);
     setScanInput('');
     scanInputRef.current?.focus();
-    deleteHeaderRef.current.style.display = 'table-cell';
-  };
-
-  const handleInputChange = (index, field, value) => {
-    setStagedOrders((prevOrders) => {
-      const updated = [...prevOrders];
-      updated[index] = { ...updated[index], [field]: value };
-      return updated;
-    });
+    // deleteHeaderRef.current.style.display = 'table-cell';
   };
 
   const findPartDescription = async (partNumber) => {
@@ -119,22 +112,36 @@ function AddOrderPage() {
     return part[0]?.part_description || '';
   };
 
+  const getUpdatedColumnDefs = () =>
+    addColumnDefs.map((item, index) =>
+      index === 9
+        ? {
+            ...item,
+            cellEditor: 'agSelectCellEditor',
+            cellEditorParams: {
+              values: locations.map((data) => data.location),
+            },
+            editable: true,
+          }
+        : item
+    );
+
   const submitStagedOrders = async () => {
-    console.log('staged: ', stagedOrders);
+    setLoading(true);
     const payload = stagedOrders.map((order) => ({
       id: order.id,
-      qr_code: order.qrCode,
-      customer_name: order.customerName,
-      procurement_specialist: order.procurementSpecialist,
-      received_date: order.receivedDate,
-      part_number: order.partNumber,
-      part_description: order.partDescription,
-      order_type: order.orderType,
-      sales_order: order.salesOrder,
+      qr_code: order.qr_code,
+      customer_name: order.customer_name,
+      procurement_specialist: order.procurement_specialist,
+      received_date: order.received_date,
+      part_number: order.part_number,
+      part_description: order.part_description,
+      order_type: order.order_type,
+      sales_order: order.sales_order,
       quantity: order.quantity,
-      box_number: order.boxNumber,
-      box_number_total: order.boxNumberTotal,
-      serial_number: order.serialNumber,
+      box_number: order.box_number,
+      box_number_total: order.box_number_total,
+      serial_number: order.serial_number,
       notes: order.notes,
       location: order.location,
     }));
@@ -145,27 +152,15 @@ function AddOrderPage() {
     if (error) {
       console.error('Error fetching data:', error);
     } else {
-      const submittedOrders = data.map((dataEntry) => ({
-        id: dataEntry.id,
-        qrCode: dataEntry.qr_code,
-        customerName: dataEntry.customer_name,
-        procurementSpecialist: dataEntry.procurement_specialist,
-        receivedDate: dataEntry.received_date,
-        partNumber: dataEntry.part_number,
-        partDescription: dataEntry.part_description,
-        orderType: dataEntry.order_type,
-        salesOrder: dataEntry.sales_order,
-        quantity: dataEntry.quantity,
-        boxNumber: dataEntry.box_number,
-        boxNumberTotal: dataEntry.box_number_total,
-        serialNumber: dataEntry.serial_number,
-        notes: dataEntry.notes,
-        location: dataEntry.location,
-      }));
       setSubmittedStatus(true);
-      setSubmittedOrders(submittedOrders);
-      console.log('submitted: ', submittedOrders);
+      setSubmittedOrders(data);
+      setLoading(false);
     }
+  };
+
+  const handleDelete = (idToDelete) => {
+    setStagedOrders((prev) => prev.filter((row) => row.id !== idToDelete));
+    // optional: call Supabase delete API here
   };
 
   const clearSubmittedOrders = () => {
@@ -175,19 +170,10 @@ function AddOrderPage() {
     scanInputRef.current?.focus();
   };
 
-  const handleDeleteClick = (e, index) => {
-    setStagedOrders((prevArray) => {
-      const newArray = prevArray.filter((_, i) => i !== index);
-      if (newArray.length === 0 && deleteHeaderRef.current) {
-        deleteHeaderRef.current.style.display = 'none';
-      }
-      return newArray;
-    });
-  };
-
   return (
     <div className={styles.container}>
-      <h2>Add Order</h2>
+      <h2 className={styles.h2}>Add Order</h2>
+
       <OrderManualInputSection
         formData={formData}
         receivedDate={receivedDate}
@@ -201,62 +187,50 @@ function AddOrderPage() {
         handleAddClick={handleAddClick}
         scanInputRef={scanInputRef}
       />
-      {!submitttedStatus ? (
-        <div className={styles.stagedOrdersContainer}>
-          <h2>Staged Orders</h2>
-          <Table striped bordered hover responsive>
-            <OrdersTableHeader deleteHeaderRef={deleteHeaderRef} />
-            <tbody>
-              {stagedOrders.length === 0 ? (
-                <tr>
-                  <td colSpan={12} className={styles.alternativeText}>
-                    Add an order...
-                  </td>
-                </tr>
-              ) : (
-                <>
-                  {stagedOrders.map((stagedOrder, index) => (
-                    <StagedOrderRow
-                      key={stagedOrder.id}
-                      stagedOrder={stagedOrder}
-                      index={index}
-                      handleInputChange={handleInputChange}
-                      locations={locations}
-                      procurementSpecialists={procurementSpecialists}
-                      handleDeleteClick={handleDeleteClick}
-                    />
-                  ))}
-                </>
-              )}
-            </tbody>
-          </Table>
-          {stagedOrders.length > 0 ? (
-            <button onClick={submitStagedOrders}>Submit</button>
-          ) : (
-            <></>
-          )}
-        </div>
-      ) : (
-        <div>
-          <div className={styles.stagedOrdersContainer}>
-            <h2>Submitted Orders</h2>
-            <Table striped bordered hover responsive>
-              <OrdersTableHeader />
-              <tbody>
-                {submittedOrders.map((submittedOrder, index) => (
-                  <SubmittedOrderRow
-                    key={submittedOrder.id}
-                    submittedOrder={submittedOrder}
-                  />
-                ))}
-              </tbody>
-            </Table>
-            <button onClick={clearSubmittedOrders}>
-              Clear and Add New Orders
-            </button>
-          </div>
-        </div>
-      )}
+      <div
+        className='ag-theme-alpine'
+        style={{ height: '50vh', width: '100%' }}
+      >
+        {!submitttedStatus ? (
+          <>
+            <AgGridReact
+              rowData={stagedOrders}
+              suppressMovableColumns={true}
+              loading={loading}
+              columnDefs={getUpdatedColumnDefs()}
+              suppressNoRowsOverlay
+              context={{ onDelete: handleDelete }}
+              onCellValueChanged={(params) => {
+                const updatedRow = params.data;
+                const rowIndex = params.node.rowIndex;
+
+                setStagedOrders((prevRows) => {
+                  const newRows = [...prevRows];
+                  newRows[rowIndex] = { ...updatedRow };
+                  return newRows;
+                });
+              }}
+            />
+            <div className={styles.buttonContainer}>
+              <button onClick={submitStagedOrders}>Submit</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <AgGridReact
+              rowData={submittedOrders}
+              suppressMovableColumns={true}
+              loading={loading}
+              columnDefs={viewColumnDefs}
+            />
+            <div className={styles.buttonContainer}>
+              <button onClick={clearSubmittedOrders}>
+                Clear and Add New Orders
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

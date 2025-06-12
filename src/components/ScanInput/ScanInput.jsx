@@ -4,7 +4,7 @@ import styles from './ScanInput.module.css';
 function ScanInput({ scanInput, scanInputRef, setScanInput, handleAddClick }) {
   return (
     <div className={styles.scanContainer}>
-      <h2>Scan QR Code</h2>
+      <h2 className={styles.h2}>Scan QR Code</h2>
       <div>
         <input
           type='text'
