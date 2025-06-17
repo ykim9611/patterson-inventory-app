@@ -16,7 +16,8 @@ function ViewAllOpenOrdersPage(props) {
       const { data, error } = await supabase
         .from('orders')
         .select('*')
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
       if (error) {
         console.error('Error fetching data:', error);
       } else {
