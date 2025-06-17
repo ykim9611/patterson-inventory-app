@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputContainer {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.inputContainer > span {
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+.inputContainer > input {
+  margin-right: 10px;
+}
