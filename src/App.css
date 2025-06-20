@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.ag-theme-alpine .ag-cell {
+  font-size: 10px;
+  /* padding: 6px 8px; optional for more space */
+  font-weight: bold;
+}
+
+.ag-theme-alpine .ag-header-cell-label {
+  font-size: 12px;
+  font-weight: bold;
+}
