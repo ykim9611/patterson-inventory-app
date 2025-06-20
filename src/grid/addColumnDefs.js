@@ -9,7 +9,7 @@ export const addColumnDefs = [
     sortable: false,
     editable: true,
     cellStyle: (params) => ({
-      backgroundColor: params.value.length > 0 ? '' : '#f8d7da', // green or red
+      backgroundColor: params.value ? '' : '#f8d7da', // green or red
     }),
   },
   {
@@ -28,7 +28,7 @@ export const addColumnDefs = [
     sortable: false,
     editable: true,
     cellStyle: (params) => ({
-      backgroundColor: params.value.length > 0 ? '' : '#f8d7da', // green or red
+      backgroundColor: params.value ? '' : '#f8d7da', // green or red
     }),
   },
   {
@@ -88,7 +88,7 @@ export const addColumnDefs = [
     sortable: false,
     editable: true,
     cellStyle: (params) => ({
-      backgroundColor: params.value.length > 0 ? '' : '#f8d7da', // green or red
+      backgroundColor: params.value ? '' : '#f8d7da', // green or red
     }),
   },
   {

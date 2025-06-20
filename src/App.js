@@ -7,6 +7,7 @@ import ViewAllOpenOrdersPage from './pages/ViewAllOpenOrdersPage/ViewAllOpenOrde
 import InstallChecklistPage from './pages/InstallChecklistPage';
 import UpdateLocationPage from './pages/UpdateLocationPage';
 import PageWrapper from './components/PageWrapper/PageWrapper';
+import './App.css';
 
 function App() {
   return (

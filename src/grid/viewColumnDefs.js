@@ -71,6 +71,14 @@ export const viewColumnDefs = [
     sortable: false,
   },
   {
+    field: 'install_number',
+    headerName: 'Service Install#',
+    filter: true,
+    flex: 1.51,
+    sortable: false,
+    editable: false,
+  },
+  {
     field: 'notes',
     headerName: 'Notes',
     filter: false,
