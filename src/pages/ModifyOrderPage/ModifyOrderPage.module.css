@@ -43,3 +43,7 @@
 .buttonContainer button:hover {
   background-color: rgb(20, 124, 189);
 }
+
+.buttonContainer > input {
+  margin-right: 10px;
+}
