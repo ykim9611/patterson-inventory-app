@@ -9,6 +9,7 @@ function ModifyOrderPage() {
   const [loadedLineItems, setloadedLineItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
+  const [serviceOrder, setServiceOrder] = useState('');
 
   useEffect(() => {
     const getLocations = async () => {
@@ -127,6 +128,16 @@ function ModifyOrderPage() {
     searchSalesOrderHandler(); // Re-fetch the latest data
   };
 
+  const handleUpdateServiceOrder = () => {
+    const updatedItems = loadedLineItems.map((item) =>
+      !item.stagedForDelete && item.install_number !== serviceOrder
+        ? { ...item, install_number: serviceOrder, wasEdited: true }
+        : item
+    );
+    setloadedLineItems(updatedItems);
+    setServiceOrder('');
+  };
+
   return (
     <div className={styles.container}>
       <h2 className={styles.h2}>Modify Order</h2>
@@ -167,8 +178,13 @@ function ModifyOrderPage() {
         />
         {loadedLineItems.length > 0 ? (
           <div className={styles.buttonContainer}>
-            <input type='text' />
-            <button>Update Install (All)</button>
+            <input
+              type='text'
+              onChange={(e) => setServiceOrder(e.target.value)}
+            />
+            <button onClick={handleUpdateServiceOrder}>
+              Update Install (All)
+            </button>
             <button onClick={handleSubmitChanges}>Update</button>
           </div>
         ) : (
