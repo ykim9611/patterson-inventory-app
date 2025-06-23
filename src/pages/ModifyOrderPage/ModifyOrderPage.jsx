@@ -167,6 +167,8 @@ function ModifyOrderPage() {
         />
         {loadedLineItems.length > 0 ? (
           <div className={styles.buttonContainer}>
+            <input type='text' />
+            <button>Update Install (All)</button>
             <button onClick={handleSubmitChanges}>Update</button>
           </div>
         ) : (
