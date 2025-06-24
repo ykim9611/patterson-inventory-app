@@ -10,6 +10,7 @@ function ModifyOrderPage() {
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
   const [serviceOrder, setServiceOrder] = useState('');
+  const [deleteAll, setDeleteAll] = useState(false);
 
   useEffect(() => {
     const getLocations = async () => {
@@ -138,6 +139,23 @@ function ModifyOrderPage() {
     setServiceOrder('');
   };
 
+  const handleDeleteAll = () => {
+    let updatedItems = [];
+    if (!deleteAll) {
+      updatedItems = loadedLineItems.map((item) => ({
+        ...item,
+        stagedForDelete: true,
+      }));
+    } else {
+      updatedItems = loadedLineItems.map((item) => ({
+        ...item,
+        stagedForDelete: false,
+      }));
+    }
+    setDeleteAll(!deleteAll);
+    setloadedLineItems(updatedItems);
+  };
+
   return (
     <div className={styles.container}>
       <h2 className={styles.h2}>Modify Order</h2>
@@ -176,8 +194,10 @@ function ModifyOrderPage() {
             );
           }}
         />
-        {loadedLineItems.length > 0 ? (
-          <div className={styles.buttonContainer}>
+      </div>
+      {loadedLineItems.length > 0 ? (
+        <div className={styles.formContainer}>
+          <div className={styles.serviceOrderContianer}>
             <input
               type='text'
               onChange={(e) => setServiceOrder(e.target.value)}
@@ -185,12 +205,21 @@ function ModifyOrderPage() {
             <button onClick={handleUpdateServiceOrder}>
               Update Install (All)
             </button>
-            <button onClick={handleSubmitChanges}>Update</button>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+          <div className={styles.deleteContainer}>
+            {deleteAll ? (
+              <button onClick={handleDeleteAll}>Undelete All</button>
+            ) : (
+              <button onClick={handleDeleteAll}>Delete All</button>
+            )}
+          </div>
+          <button className={styles.submitButton} onClick={handleSubmitChanges}>
+            Submit
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

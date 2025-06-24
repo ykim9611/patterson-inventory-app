@@ -25,13 +25,16 @@
   margin-top: 20px;
 }
 
-.buttonContainer {
+.formContainer {
   margin-top: 1rem;
   display: flex;
-  justify-content: center; /* right-aligned */
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+
 }
 
-.buttonContainer button {
+.formContainer button {
   padding: 0.5rem 1rem;
   background-color: rgb(0, 55, 103);
   color: white;
@@ -40,10 +43,27 @@
   cursor: pointer;
 }
 
-.buttonContainer button:hover {
+.formContainer button:hover {
   background-color: rgb(20, 124, 189);
 }
 
-.buttonContainer > input {
+.serviceOrderContianer > input {
   margin-right: 10px;
+}
+
+.deleteContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+
+.deleteContainer > button {
+  width: 380px;
+  
+}
+
+.submitButton {
+  margin-top: 5px;
+  width: 380px;
 }
