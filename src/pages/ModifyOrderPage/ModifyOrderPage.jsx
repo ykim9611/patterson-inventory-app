@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import styles from './ModifyOrderPage.module.css';
 import { supabase } from '../../services/supabaseClient';
 import { modifyColumnDefs } from '../../grid/modifyColumnDefs';
+import SubmitModal from '../../components/SubmitModal/SubmitModal';
 
 function ModifyOrderPage() {
   const [salesOrder, setSalesOrder] = useState('');
@@ -10,6 +11,8 @@ function ModifyOrderPage() {
   const [loading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
   const [serviceOrder, setServiceOrder] = useState('');
+  const [deleteAll, setDeleteAll] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getLocations = async () => {
@@ -123,6 +126,7 @@ function ModifyOrderPage() {
         console.log(`Row ${id} updated successfully.`);
       }
     }
+    setShowModal(false);
 
     // Optional: Refresh data after submission
     searchSalesOrderHandler(); // Re-fetch the latest data
@@ -136,6 +140,23 @@ function ModifyOrderPage() {
     );
     setloadedLineItems(updatedItems);
     setServiceOrder('');
+  };
+
+  const handleDeleteAll = () => {
+    let updatedItems = [];
+    if (!deleteAll) {
+      updatedItems = loadedLineItems.map((item) => ({
+        ...item,
+        stagedForDelete: true,
+      }));
+    } else {
+      updatedItems = loadedLineItems.map((item) => ({
+        ...item,
+        stagedForDelete: false,
+      }));
+    }
+    setDeleteAll(!deleteAll);
+    setloadedLineItems(updatedItems);
   };
 
   return (
@@ -176,8 +197,10 @@ function ModifyOrderPage() {
             );
           }}
         />
-        {loadedLineItems.length > 0 ? (
-          <div className={styles.buttonContainer}>
+      </div>
+      {loadedLineItems.length > 0 ? (
+        <div className={styles.formContainer}>
+          <div className={styles.serviceOrderContianer}>
             <input
               type='text'
               onChange={(e) => setServiceOrder(e.target.value)}
@@ -185,12 +208,29 @@ function ModifyOrderPage() {
             <button onClick={handleUpdateServiceOrder}>
               Update Install (All)
             </button>
-            <button onClick={handleSubmitChanges}>Update</button>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+          <div className={styles.deleteContainer}>
+            {deleteAll ? (
+              <button onClick={handleDeleteAll}>Undelete All</button>
+            ) : (
+              <button onClick={handleDeleteAll}>Delete All</button>
+            )}
+          </div>
+          <button
+            className={styles.submitButton}
+            onClick={() => setShowModal(true)}
+          >
+            Submit
+          </button>
+          <SubmitModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            handleSubmitChanges={handleSubmitChanges}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
