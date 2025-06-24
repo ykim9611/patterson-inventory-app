@@ -1,7 +1,13 @@
 import React from 'react';
 import styles from './ScanInput.module.css';
 
-function ScanInput({ scanInput, scanInputRef, setScanInput, handleAddClick }) {
+function ScanInput({
+  scanInput,
+  scanInputRef,
+  setScanInput,
+  handleAddClick,
+  stageAddButtonEnabled,
+}) {
   return (
     <div className={styles.scanContainer}>
       <h2 className={styles.h2}>Scan QR Code</h2>
@@ -14,7 +20,11 @@ function ScanInput({ scanInput, scanInputRef, setScanInput, handleAddClick }) {
           onChange={(e) => setScanInput(e.target.value)}
           ref={scanInputRef}
         />
-        <button onClick={(e) => handleAddClick(e)}>Add</button>
+        {stageAddButtonEnabled ? (
+          <button onClick={(e) => handleAddClick(e)}>Add</button>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

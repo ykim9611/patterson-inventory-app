@@ -24,6 +24,8 @@ function AddOrderPage(props) {
   const [submittedStatus, setSubmittedStatus] = useState(false);
   const [submittedOrders, setSubmittedOrders] = useState([]);
 
+  const [stageAddButtonEnabled, setStageAddButtonEnabled] = useState(true);
+
   useEffect(() => {
     const getProcurementSpecialists = async () => {
       const { data, error } = await supabase
@@ -163,6 +165,7 @@ function AddOrderPage(props) {
       console.error('Error submitting orders:', error);
       setLoading(false);
     } else {
+      setStageAddButtonEnabled(false);
       setSubmittedStatus(true);
       setSubmittedOrders(data);
       setLoading(false);
@@ -175,6 +178,7 @@ function AddOrderPage(props) {
   };
 
   const clearSubmittedOrders = () => {
+    setStageAddButtonEnabled(true);
     setSubmittedStatus(false);
     setSubmittedOrders([]);
     setStagedOrders([]);
@@ -197,6 +201,7 @@ function AddOrderPage(props) {
         setScanInput={setScanInput}
         handleAddClick={handleAddClick}
         scanInputRef={scanInputRef}
+        stageAddButtonEnabled={stageAddButtonEnabled}
       />
       <div
         className='ag-theme-alpine'
