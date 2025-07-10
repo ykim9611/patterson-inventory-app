@@ -22,3 +22,16 @@ code {
   font-size: 12px;
   font-weight: bold;
 }
+
+button {
+  padding: 0.5rem 1rem;
+  background-color: rgb(0, 55, 103);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(20, 124, 189);
+}

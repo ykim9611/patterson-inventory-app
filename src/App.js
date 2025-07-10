@@ -4,7 +4,7 @@ import NavBar from './components/NavBar/NavBar';
 import AddOrderPage from './pages/AddOrderPage/AddOrderPage';
 import ModifyOrderPage from './pages/ModifyOrderPage/ModifyOrderPage';
 import ViewAllOpenOrdersPage from './pages/ViewAllOpenOrdersPage/ViewAllOpenOrdersPage';
-import InstallChecklistPage from './pages/InstallChecklistPage';
+import InstallChecklistPage from './pages/InstallChecklistPage/InstallChecklistPage';
 import UpdateLocationPage from './pages/UpdateLocationPage';
 import PageWrapper from './components/PageWrapper/PageWrapper';
 import './App.css';
