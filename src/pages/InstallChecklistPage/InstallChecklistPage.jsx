@@ -24,6 +24,7 @@ function InstallChecklistPage(props) {
       } else {
         setFoundTiedOrders(true);
         setRowData(data);
+        setLoading(true);
         console.log(data);
       }
     };
