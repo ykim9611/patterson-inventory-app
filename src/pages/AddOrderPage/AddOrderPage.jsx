@@ -7,6 +7,7 @@ import OrderManualInputSection from '../../components/OrderManualInputSection/Or
 import ScanInput from '../../components/ScanInput/ScanInput';
 import styles from './AddOrderPage.module.css';
 import { v4 as uuidv4 } from 'uuid';
+import NewPartNumberModal from '../../components/NewPartNumberModal/NewPartNumberModal';
 
 function AddOrderPage(props) {
   const [procurementSpecialists, setProcurementSpecialists] = useState([]);
@@ -25,6 +26,8 @@ function AddOrderPage(props) {
   const [submittedOrders, setSubmittedOrders] = useState([]);
 
   const [stageAddButtonEnabled, setStageAddButtonEnabled] = useState(true);
+  const [missingPartNumber, setMissingPartNumber] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getProcurementSpecialists = async () => {
@@ -98,10 +101,22 @@ function AddOrderPage(props) {
 
     if (!data || data.length === 0) {
       // Handle new part description logic if needed
+      setMissingPartNumber(partNumber);
+      setShowModal(true);
       return '';
     }
 
     return data[0].part_description || '';
+  };
+
+  const handleSaveDescription = (partNumber, description) => {
+    setStagedOrders((prev) =>
+      prev.map((item) =>
+        item.part_number === partNumber
+          ? { ...item, part_description: description }
+          : item
+      )
+    );
   };
 
   const handleAddClick = async (e) => {
@@ -188,7 +203,6 @@ function AddOrderPage(props) {
   return (
     <div className={styles.container}>
       <h2 className={styles.h2}>Add Order</h2>
-
       <OrderManualInputSection
         formData={formData}
         receivedDate={receivedDate}
@@ -202,6 +216,12 @@ function AddOrderPage(props) {
         handleAddClick={handleAddClick}
         scanInputRef={scanInputRef}
         stageAddButtonEnabled={stageAddButtonEnabled}
+      />
+      <NewPartNumberModal
+        show={showModal}
+        setShow={setShowModal}
+        partNumber={missingPartNumber}
+        onSave={handleSaveDescription}
       />
       <div
         className='ag-theme-alpine'

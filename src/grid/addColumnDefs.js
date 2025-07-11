@@ -54,6 +54,9 @@ export const addColumnDefs = [
     sortable: false,
     flex: 2,
     editable: true,
+    cellStyle: (params) => ({
+      backgroundColor: params.value ? '' : '#f8d7da', // green or red
+    }),
   },
   {
     field: 'serial_number',
